@@ -5,6 +5,8 @@ android {
     defaultConfig {
         minSdkVersion 23
         targetSdkVersion 32
+
+        namespace 'com.xueke.liveness'
     }
 
     buildTypes {
