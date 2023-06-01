@@ -1,42 +1,55 @@
-apply plugin: 'com.android.library'
+plugins {
+    id 'com.android.library'
+    id 'maven-publish'
+}
+
+group = 'com.github.jitpack'
+version = '1.0.4'
+
 
 android {
-    compileSdkVersion 32
+    compileSdk 33
+
     defaultConfig {
-        minSdkVersion 23
-        targetSdkVersion 32
-
-        namespace 'com.xueke.liveness'
-
+        minSdk 23
+        targetSdk 33
+        versionCode 1
+        versionName "1.0"
     }
 
     buildTypes {
-        debug {
-//            buildConfigField "String", "HOST_URL", "\"https://cloudapi.pakistan.accuauth.com\""
-//            buildConfigField "String", "API_ID", "\"eb129020d65948c0b3b8efaa337cf7ce\""
-//            buildConfigField "String", "API_SECRET", "\"678cfff61fe3494b8fa142157ead8cfc\""
-        }
-
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-//            buildConfigField "String", "HOST_URL", "\"https://cloudapi.pakistan.accuauth.com\""
-//            buildConfigField "String", "API_ID", "\"eb129020d65948c0b3b8efaa337cf7ce\""
-//            buildConfigField "String", "API_SECRET", "\"678cfff61fe3494b8fa142157ead8cfc\""
         }
     }
 
-    sourceSets {
-        main {
-            jniLibs.srcDirs = ['libs']
-        }
-    }
 }
 
 dependencies {
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    implementation 'androidx.appcompat:appcompat:1.4.1'
+    implementation 'com.google.android.material:material:1.5.0'
+//    implementation(name: 'DFLivenessSDK', ext: 'aar')
+//    implementation files('libs/DFLivenessSDK.aar')
 }
 
-configurations.maybeCreate("default")
-artifacts.add("default", file('DFLivenessSDK.aar'))
+afterEvaluate {
+    publishing {
+        publications {
+            // Creates a Maven publication called "release".
+            release(MavenPublication) {
+                from components.release
+                groupId = 'com.github.jitpack'
+                artifactId = 'liveness'
+                version = '1.0.4'
+            }
+        }
+    }
+
+    configurations.maybeCreate("default")
+    artifacts.add("default", file('DFLivenessSDK.aar'))
+}
+
 
 
